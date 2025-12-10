@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8080
+
+email:
+  sender: "verified-sender@example.com"     # SES에서 인증한 발신자 이메일
+  counselor: "counselor@example.com"        # 상담사 이메일
+  region: "us-east-1"                       # SES 리전(지금은 나중에 사용 예정)

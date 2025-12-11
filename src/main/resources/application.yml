@@ -25,6 +25,10 @@ spring:
 server:
   port: 8080
 
+app:
+  cors:
+    allowed-origin: ${FRONTEND_ORIGIN:https://www.2dolist.click}
+
 email:
   sender: "verified-sender@example.com"     # SES에서 인증한 발신자 이메일
   counselor: "counselor@example.com"        # 상담사 이메일

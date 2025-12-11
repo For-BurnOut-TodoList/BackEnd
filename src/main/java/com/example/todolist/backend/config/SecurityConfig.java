@@ -1,5 +1,6 @@
 package com.example.todolist.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,9 +9,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final String frontendOrigin;
+
+    public SecurityConfig(@Value("${app.cors.allowed-origin}") String frontendOrigin) {
+        this.frontendOrigin = frontendOrigin;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -19,9 +28,9 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new org.springframework.web.cors.CorsConfiguration();
-                    config.addAllowedOriginPattern("*");
-                    config.addAllowedHeader("*");
-                    config.addAllowedMethod("*");
+                    config.setAllowedOrigins(List.of(frontendOrigin));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setAllowedMethods(List.of("*"));
                     config.setAllowCredentials(true);
                     return config;
                 }))

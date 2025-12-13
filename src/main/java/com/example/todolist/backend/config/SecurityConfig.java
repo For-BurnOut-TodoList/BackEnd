@@ -17,7 +17,9 @@ public class SecurityConfig {
 
     private final String frontendOrigin;
 
-    public SecurityConfig(@Value("${app.cors.allowed-origin}") String frontendOrigin) {
+    public SecurityConfig(
+            @Value("${app.cors.allowed-origin}") String frontendOrigin
+    ) {
         this.frontendOrigin = frontendOrigin;
     }
 
@@ -30,14 +32,16 @@ public class SecurityConfig {
                     var config = new org.springframework.web.cors.CorsConfiguration();
                     config.setAllowedOrigins(List.of(frontendOrigin));
                     config.setAllowedHeaders(List.of("*"));
-                    config.setAllowedMethods(List.of("*"));
+                    config.setAllowedMethods(
+                            List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                    );
                     config.setAllowCredentials(true);
                     return config;
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().permitAll());
-
+                        .anyRequest().permitAll()
+                );
 
         return http.build();
     }
@@ -47,3 +51,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+
